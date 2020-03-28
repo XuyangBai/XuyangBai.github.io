@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Zexin Luo | Xuyang BAI</title>
+    <link>/authors/zexin-luo/</link>
+      <atom:link href="/authors/zexin-luo/index.xml" rel="self" type="application/rss+xml" />
+    <description>Zexin Luo</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>2020</copyright><lastBuildDate>Sat, 13 Jun 2020 00:37:54 +0800</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Zexin Luo</title>
+      <link>/authors/zexin-luo/</link>
+    </image>
+    
+    <item>
+      <title>ASLFeat: Learning Local Features of Accurate Shape and Localization.</title>
+      <link>/publication/aslfeat/</link>
+      <pubDate>Sat, 13 Jun 2020 00:37:54 +0800</pubDate>
+      <guid>/publication/aslfeat/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>D3Feat: Joint Learning of Dense Detection and Description of 3D Local Features.</title>
+      <link>/publication/d3feat/</link>
+      <pubDate>Sat, 13 Jun 2020 00:37:54 +0800</pubDate>
+      <guid>/publication/d3feat/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

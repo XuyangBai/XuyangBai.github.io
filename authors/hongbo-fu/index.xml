@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hongbo Fu | Xuyang BAI</title>
+    <link>/authors/hongbo-fu/</link>
+      <atom:link href="/authors/hongbo-fu/index.xml" rel="self" type="application/rss+xml" />
+    <description>Hongbo Fu</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>2020</copyright><lastBuildDate>Sat, 13 Jun 2020 00:37:54 +0800</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Hongbo Fu</title>
+      <link>/authors/hongbo-fu/</link>
+    </image>
+    
+    <item>
+      <title>D3Feat: Joint Learning of Dense Detection and Description of 3D Local Features.</title>
+      <link>/publication/d3feat/</link>
+      <pubDate>Sat, 13 Jun 2020 00:37:54 +0800</pubDate>
+      <guid>/publication/d3feat/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
