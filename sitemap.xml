@@ -93,15 +93,36 @@
   </url>
   
   <url>
+    <loc>/post/3d_features/</loc>
+    <lastmod>2020-04-12T10:52:02+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/descriptors/</loc>
+    <lastmod>2020-04-12T10:52:02+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/point-cloud/</loc>
+    <lastmod>2020-04-12T10:52:02+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/</loc>
+    <lastmod>2020-04-12T10:52:02+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2020-04-12T10:52:02+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/authors/admin/</loc>
   </url>
   
   <url>
     <loc>/categories/</loc>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
   </url>
   
 </urlset>
