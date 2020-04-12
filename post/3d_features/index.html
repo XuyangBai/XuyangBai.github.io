@@ -44,6 +44,9 @@
 
   
   
+  
+  <script src="/js/mathjax-config.js"></script>
+  
 
   
   
@@ -174,9 +177,9 @@
 
       
       
-        
-      
 
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
       
     
       
@@ -618,9 +621,9 @@
     <div class="article-style">
       
 
-<p>Point cloud registration aims to find the transformation matrix between two partially overlapped point cloud, which is a fundamental task in many computer vision applications such as SLAM. In general, there are two groups of registration approaches, namely, feature matching based methods and ICP based methods. In this blog, I will introduce several representative works in the core of feature matching based algorithms &ndash; learning 3D local descriptors.</p>
+<p>Point cloud registration aims to find the transformation matrix between two partially overlapped point cloud, which is a fundamental task in many computer vision applications such as SLAM. In general, there are two groups of registration approaches, namely, coarse registration methods and fine registration methods (or global registration and local registration). In this blog, I will introduce several representative works in the core of deep learning based coarse registration methods (feature matching based algorithms) &ndash; 3D local descriptors.</p>
 
-<p>Most of the feature matching based registration algorithms usually contains the similar workflow. 1) The keypoints are detected from the origin point clouds using the 3D keypoint detector such as 3D SIFT, 3D Harris, Intrinsic Shape Signature. 2) Local feature descriptors are extracted from hand crafted algorithms like Spin Image, Fast Point Feature Histograms, SHOT to encode the local neighborhood information. Recently deep neural networks demonstrate its superiority to hand-crafted methods on extracting the local features for 3D keypoints. 3) The correspondences are built by nearest neighbor search in feature space. Outlier rejection strategy like RANSAC can be utilized to remove the outlier matches to improve the registration results. 4) The transformation between two point clouds is estimated based the correspondences. And in this blog I will focus on the second step, learning the local feature descriptors.</p>
+<p>Most of the feature matching based registration algorithms usually contains the similar workflow. 1) The keypoints are detected from the origin point clouds using the 3D keypoint detectors such as 3D SIFT, 3D Harris, Intrinsic Shape Signature. 2) Local feature descriptors are extracted from hand crafted algorithms like Spin Image, Fast Point Feature Histograms, SHOT to encode the local neighborhood information. Recently deep neural networks demonstrate its superiority to hand-crafted methods on extracting the local features for 3D keypoints. 3) The correspondences are built by nearest neighbor search in feature space. Outlier rejection strategy like RANSAC can be utilized to remove the outlier matches to improve the registration results. 4) The transformation between two point clouds is estimated based the correspondences. And in this blog I will focus on the second step, learning the local feature descriptors.</p>
 
 <h1 id="learned-3d-local-descriptors">Learned 3D Local Descriptors</h1>
 
@@ -632,11 +635,11 @@
 
 <p><img src="https://cl.ly/5f898a98aff9/download/Image%2525202020-01-03%252520at%2525207.07.53%252520PM.png" alt="3DMatch" /></p>
 
-<p>However, the truncated distance function(TDF) suffers from boundary effects and noise. Besides, the sparsity of binary occupancy grids slow down the gradient flow during backpropagation (about 90% of the voxels are zeros). To alleviate the mentioned problems, Gojcic et al. recently proposed PerfectMatch(<a href="https://arxiv.org/abs/1811.06879">https://arxiv.org/abs/1811.06879</a>) which first transfers the point cloud patches to voxel grid representation, then applied the smoothed density value voxelization. Batch hard loss function are adopted to make the network focus on more informative correspodning pairs. The SDV voxelization has several advantages over the traditional binary occupancy grid and the truncated distance function. On one hand, the impact of boundary effects and noise are mitigated by smoothing operation. On the other hand, the sparsity is greatly reduced, which enables better gradient flow.</p>
+<p>However, the truncated distance function(TDF) suffers from boundary effects and noise. Besides, the sparsity of binary occupancy grids slow down the gradient flow during backpropagation (about 90% of the voxels are zeros). To alleviate the mentioned problems, Gojcic et al. recently proposed PerfectMatch(<a href="https://arxiv.org/abs/1811.06879">https://arxiv.org/abs/1811.06879</a>) which first transfers the point cloud patches to voxel grid representation, then applied the smoothed density value voxelization. Then the famous metric learning strategy batch hard mining and triplet loss are adopted to make the network focus on more informative corresponding pairs. The SDV voxelization has several advantages over the traditional binary occupancy grid and the truncated distance function. On one hand, the impact of boundary effects and noise are mitigated by smoothing operation. On the other hand, the sparsity is greatly reduced, which enables better gradient flow. Lastly, because the SDV smooth the input point cloud to a similar density level, the network demonstrate strong generalization ability.</p>
 
 <p><img src="https://cl.ly/af1bc4d15d11/download/Image%2525202020-01-03%252520at%2525207.08.29%252520PM.png" alt="PerfectMatch_method" /></p>
 
-<p>Their method outperforms all the existing hand-crafted and learned features on the well-known point cloud registration benchmark 3DMatch. Besides, their method demonstrates strong generalization ability on ETH dataset thanks to SDV as they do not overfit exact data cues during training. As shown in following figure, PerfectMatch generates reliable correspondences for apirs with low overlap.</p>
+<p>Their method outperforms all the existing hand-crafted and learned features on the well-known point cloud registration benchmark 3DMatch. Besides, their method demonstrates strong generalization ability on ETH dataset thanks to SDV as they do not overfit exact data cues during training. As shown in following figure, PerfectMatch generates reliable correspondences for pairs with low overlap.</p>
 
 <p><img src="https://cl.ly/ff8db2509b3a/download/Image%2525202020-01-03%252520at%2525207.08.47%252520PM.png" alt="PerfectMatch_result" /></p>
 
@@ -692,7 +695,7 @@
 
 <p>These descriptors generate the histogram according to the geometric attributes(e.g. normals, curvatures) of the points on the surface.</p>
 
-<p>Point Feature Histogram (PFH). PFH is a multi-dimensional histogram over several features (4) of point pairs in the support region. For each point pair in the local neighbohood, the point pair feature containing distance, normal angles is calculated. Finally PFH is genearted by accumulating points in particular bins along the four dimentions. The dimension of PFH is $d<em>{pfh}^4$ where $d</em>{pfh}$ is the number of bins along each dimension. A good property of PFH is that it is rotation invariant because the angle and distance are all invariant under Euclidean transformation. Fast point feature histogram (FPFH) is a modified version of PFH. In the first step, it only calculate the point pair feature between the central point and neighboring points. Then one histogram is generated along each dimension, while a joint histogram isgenerated along four different dimensions in PFH. Finally FPFH is constructed as the weighted sum of the SPFH of the feature point and the SPFHs of the points in the support region.</p>
+<p>Point Feature Histogram (PFH). PFH is a multi-dimensional histogram over several features (4) of point pairs in the support region. For each point pair in the local neighbohood, the point pair feature containing distance, normal angles is calculated. Finally PFH is genearted by accumulating points in particular bins along the four dimentions. The dimension of PFH is $d_{pfh}^4$, where $d$ is the number of bins along each dimension. A good property of PFH is that it is rotation invariant because the angle and distance are all invariant under Euclidean transformation. Fast point feature histogram (FPFH) is a modified version of PFH. In the first step, it only calculate the point pair feature between the central point and neighboring points. Then one histogram is generated along each dimension, while a joint histogram isgenerated along four different dimensions in PFH. Finally FPFH is constructed as the weighted sum of the SPFH of the feature point and the SPFHs of the points in the support region.</p>
 
 <p><img src="https://cl.ly/316897176dcd/download/Image%2525202020-01-04%252520at%2525204.12.54%252520PM.png" alt="fpfh" /></p>
 
@@ -707,7 +710,7 @@
 <ul>
 <li><p>Currently, the results on 3DMatch benchmark (as well as KITTI dataset for outdoor scenes) already saturated (more than 95% in terms of feature matching recall), we need more datasets/benchmarks to discover the problem of our algorithms and guide our future research.</p></li>
 
-<li><p>Whether the efforts made to local descriptors will finally bring better registration results (more precise estimated transformation matrix) is not guaranteed.</p></li>
+<li><p>Whether the efforts made to local descriptors will finally bring better registration results (more precise estimated transformation matrix) is not guaranteed. And also that&rsquo;s why some paper focusing on end-to-end registration which directly predict the pose between point clouds are recently published (such as Deep Closest Point(<a href="https://arxiv.org/abs/1905.03304">https://arxiv.org/abs/1905.03304</a>), PointNetLK(<a href="https://arxiv.org/abs/1903.05711">https://arxiv.org/abs/1903.05711</a>), RPM-Net(<a href="https://arxiv.org/abs/2003.13479)">https://arxiv.org/abs/2003.13479)</a>)</p></li>
 
 <li><p>More attention might be paid on keypoint detection and outlier rejection part.</p></li>
 
@@ -719,11 +722,9 @@
 <ul>
 <li><p>Harder and Larger scale dataset and benchmark for point cloud registration task.</p></li>
 
-<li><p>End-to-end training, which combines the feature description, correspondence establishment and transformation estimation in one network. (e.g. <a href="https://arxiv.org/abs/1904.04281">https://arxiv.org/abs/1904.04281</a>)</p></li>
+<li><p>End-to-end training, which combines the feature description, correspondence establishment and transformation estimation in one network.</p></li>
 
-<li><p>Borrowing idea from 2D image matching area, keypoint detection and description can be jointly optimized (which I am doing). And outlier rejection strategy is also worth trying. But still as mentioned, the results on 3DMatch saturated, it might be difficult to demonstrate the superioty of proposed methods.</p></li>
-
-<li><p>The feature matching based algorithms are often used as a coarse registration, following by a fine registration algirthm like ICP, because they are not accurate enough. There are also thousands of works trying to improve the traditional ICP, so is there any way to registrate the point cloud in a coarse-to-fine manner(a network that can do similar things with ICP)?</p></li>
+<li><p>Borrowing idea from 2D image matching area, keypoint detection and description can be jointly optimized (which is the idea of our new CVPR paper D3Feat(<a href="https://arxiv.org/abs/2003.03164)">https://arxiv.org/abs/2003.03164)</a>). And outlier rejection strategy is also worth trying. But still as mentioned, the results on 3DMatch saturated, it might be difficult to demonstrate the superioty of proposed methods.</p></li>
 </ul>
 
     </div>
